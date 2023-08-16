@@ -11,6 +11,7 @@
 # Fuentes de información
 
 - [Wikipedia](https://es.wikipedia.org)
+- [Modelos de Inteligencia Artificial (Ed. Marcombo)](https://www.marcombo.com/modelos-de-inteligencia-artificial-9788426734419/)
 
 # Etiquetas:
 

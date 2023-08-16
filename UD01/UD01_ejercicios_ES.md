@@ -1,15 +1,14 @@
 ﻿---
 title: Ejercicios de la UD01
 language: ES
-author: David Martínez Peña [www.martinezpenya.es]
-subject: Programación
-keywords: [PRG, 2022, Programacion, Java]
-IES: IES Eduardo Primo Marqués (Carlet) [www.ieseduardoprimo.es]
+author: www.martinezpenya.es
+subject: Modelos de Inteligencia Artificial
+keywords: [MIA, 2023, Modelos de Inteligencia Artificial, Curso Especialización IA-BD]
+IES: www.ieseduardoprimo.es
 header: ${title} - ${subject} (ver. ${today}) 
 footer:${currentFileName}.pdf - ${author} - ${IES} - ${pageNo}/${pageCount}
 typora-root-url:${filename}/../
 typora-copy-images-to:${filename}/../assets
-imgcover:/media/DADES/NextCloud/DOCENCIA/PRG_2223/PRG-CFGS-2223/UD01/assets/cover.png
 ---
 [toc]
 

@@ -1,5 +1,5 @@
 ---
-title: UD01: Caracterización de sistemas de Inteligencia Artificial
+title: UD01: Caracterización de sistemas y utilización de modelos de Inteligencia Artificial
 language: ES
 author: www.martinezpenya.es
 subject: Modelos de Inteligencia Artificial
@@ -1120,6 +1120,45 @@ En el ámbito del entretenimiento, la AR y la VR proporcionan experiencias inmer
 ![https://sataraseguridad.com/2021/03/31/la-realidad-virtual-llega-al-entrenamiento-policial/](assets/PoliciaVR.png)
 
 https://sataraseguridad.com/2021/03/31/la-realidad-virtual-llega-al-entrenamiento-policial/
+
+# Mapa conceptual
+
+```mermaid
+mindmap
+  root)"</br>🤖Inteligencia Artificial</br>"(
+    [</br>🏗️Fundamentos</br>]
+      (Definición)
+      (Historia)
+      (Futuro)
+      (Sistemas</br>Inteligentes)
+    [🗂Clasificaciones]
+      (Según tareas)
+      (Escuelas)
+      (Russell/Norvig)
+      (Hintze)
+    [📊Utilizacion</br>Modelos]
+      (Requisitos</br>de un SRP)
+      (Modelos de</br>sistemas de IA)
+    [🛠Tecnicas]
+      (Sistemas</br>expertos)
+      (Machine</br>Learning)
+      (Redes</br>Neuronales)
+      (Algoritmos</br>Genéticos)
+      (Lógica</br>Difusa)
+    [📲Aplicaciones]
+      (Visión por</br>Computadora)
+      (PLN)
+      (Analítica</br>avanzada)
+      (Robótica</br>e IA)
+      (Ciencia de datos</br>y Data Mining)
+      (Ciberseguridad)
+    [🎭Interacción]
+      (Voz)
+      (Cerebro</br>Computadora)
+      (RA y RV)
+```
+
+
 
 # Fuentes de información
 
