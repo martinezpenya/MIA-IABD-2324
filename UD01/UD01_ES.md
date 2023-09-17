@@ -677,7 +677,7 @@ En este tipo de problemas lo más importante es definir y programar las condicio
 
 https://www.youtube.com/watch?v=gn4nRCC9TwQ
 
-## Redes Neuronales Artificiales (SAA)
+## Redes Neuronales Artificiales (SAA y PIA)
 
 ### Conceptos básicos y funcionamiento
 
