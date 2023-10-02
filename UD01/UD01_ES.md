@@ -202,7 +202,7 @@ En la actualidad se está trabajando (y se esperan mejoras en los próximos año
 - Traducción simultánea universal.
 - Control de juegos con el pensamiento.
 
-Y a medio plazo se prevé que la Inteligencia Artificial proporciones soluciones y mejoras en los siguientes ámbitos:
+Y a medio plazo se prevé que la Inteligencia Artificial proporcione soluciones y mejoras en los siguientes ámbitos:
 
 - Nueva generación de robots interconectados con la nube.
 - Robots médicos autónomos.
@@ -303,7 +303,7 @@ Los agentes inteligentes son entidades capaces de percibir su entorno a través 
 > - **Función del Agente (f)**: La función del agente en este caso podría ser bastante simple: recibir la ubicación actual y el destino deseado, calcular la ruta más rápida y segura y guiar al conductor a lo largo del camino.
 > - **Arquitectura (A)**: La arquitectura del sistema de navegación podría ser una combinación de algoritmos de planificación de rutas, sistemas de reconocimiento de voz para recibir comandos del conductor y sistemas de visualización para mostrar las indicaciones.
 >
-> A continuación, un diagrama en mermaid para ilustrar la interacción de un agente inteligente con su entorno:
+> A continuación, un diagrama para ilustrar la interacción de un agente inteligente con su entorno:
 >
 > ```mermaid
 > flowchart LR
@@ -413,7 +413,7 @@ Esta corriente ha sido la que impulsó hace pocos años lo que conocemos como "A
 
 Algunas técnicas de esta escuela son:
 
-- M**áquina de vectores soporte**: sistemas que permiten reconocimiento de patrones genéricos de gran potencia.
+- **Máquina de vectores soporte**: sistemas que permiten reconocimiento de patrones genéricos de gran potencia.
 - **Redes neuronales**: sistemas basados en redes de unidades de computación lineal para simular computación no lineal
 - **Modelos ocultos de Markov**: aprendizaje basado en dependencia temporal de eventos probabilísticos.
 - **Sistemas difusos**: técnicas para lograr el razonamiento bajo incertidumbre 
