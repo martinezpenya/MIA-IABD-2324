@@ -101,7 +101,7 @@ section {
   justify-content: top;
  }
 </style>
-# Técnicas de la Inteligencia Artificial
+# 4. Técnicas de la Inteligencia Artificial
 <!--A continuación veremos una taxonomía de técnicas que se usan en IA, algunas se estudiaran a fondo en este módulo (Modelos de Inteligencia Artificial - MIA) y otros en otro módulo del curso (Sistemas de Aprendizaje Automático - SAA).-->
 ## Modelo Clásico. Sistemas expertos (MIA)
 * La Inteligencia Artificial, inicialmente, tuvo un desarrollo más teórico que práctico. Los planteamientos originarios de esta Inteligencia Artificial clásica se definieron para un tipo de trabajo informático que ignoraba en buena medida cómo se ha desarrollado en los últimos decenios y que actualmente está establecido como convencional.
