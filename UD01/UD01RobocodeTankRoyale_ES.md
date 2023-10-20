@@ -51,7 +51,7 @@ typora-copy-images-to:${filename}/../assets
 
 ## Proyecto IntelliJ
 
-Para acelerar el proceso, he preparado un proyecto en IntelliJ con toda la arquitectura básica que necesitará tu Bot. Descarga y descomprime esta [carpeta](assets/IABDBot.zip) y abre el proyecto con el IDE IntelliJ.
+Para acelerar el proceso, he preparado un proyecto en IntelliJ con toda la arquitectura básica que necesitará tu Bot. Descarga y descomprime esta [carpeta](https://raw.githubusercontent.com/martinezpenya/MIA-IABD-2324/master/UD01/assets/IABDBot.zip) y abre el proyecto con el IDE IntelliJ.
 
 También necesitaras la libreria (API) de Robocode Tank Royale que puedes descargar desde aquí: https://github.com/robocode-dev/tank-royale/releases. Descarga el archivo: `robocode-tankroyale-bot-api-x.y.z.jar`
 
