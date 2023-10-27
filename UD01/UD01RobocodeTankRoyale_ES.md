@@ -144,7 +144,8 @@ Puntos importantes:
 - El cañón gira máximo 20º por turno.
 - El radar gira máximo 45º por turno.
 - La potencia de tiro influye en el daño provocado y los puntos conseguidos, pero también en el calentamiento del cañón.
-- El atropello da más puntos que los disparos (pero te resta energia)
+- Inicialmente el cañón está caliente (3 unidades), al principio has de esperar a que se enfrie para disparar.
+- El atropello da más puntos que los disparos (pero te resta energía)
 - Si chocas con una pared, pierdes puntos.
 - La energía que te sobra en una ronda no da puntos (modo kamikaze con el último robot?)
 
@@ -197,6 +198,19 @@ waitFor(new Condition(() -> getTurnRemaining() == 0);
 
 El resultado de los dos fragmentos seria el mismo.
 
+## Personalizar mi Bot
+
+Podemos establecer colores para el cuerpo, torreta de cañón, el radar, el arco de escaneo y de la bala:
+
+```java
+Color kaki = Color.fromString("#febe56");
+setBodyColor(kaki);
+setTurretColor(kaki);
+setRadarColor(kaki);
+setScanColor(kaki);
+setBulletColor(kaki);
+```
+
 ## Técnicas de escaneo (Radar)
 
 Sentidos de nuestro Bot:
@@ -213,21 +227,74 @@ Sentido de la **vista**, tu Bot sabe cuándo ha visto otro robot, pero sólo si 
 
 Además también es consciente de sus balas y sabe cuando una bala ha sido disparada (`onBulletFired`) ha alcanzado a un oponente (`onBulletHit`), cuando una bala golpea una pared (`onBulletWall`) o cuando una bala golpea a otra bala (`onBulletHitBullet`).
 
-Fijar el radar en un enemigo:
+Configurar correctamente tu Bot con:
 
-- Arco de radar Estrecho
-- Radar Oscilante
-- Escaneo más inteligente (seguir al cercano)
+```java
+setAdjustRadarForBodyTurn(true);//true if the radar must adjust/compensate for the body's turn;
+								//false if the radar must turn with the body turning (default).
+setAdjustGunForBodyTurn(true);  //true if the gun must adjust/compensate for the bot's turn;
+							    //false if the gun must turn with the bot's turn.
+setAdjustRadarForGunTurn(true); //true if the radar must adjust/compensate for the gun's turn;
+								//false if the radar must turn with the gun's turn.
+```
+
+Que el radar siempre de vueltas:
+
+```java
+setTurnRadarLeft(Double.POSITIVE_INFINITY); //degrees - is the amount of degrees to turn left. If negative, the radar will turn right.
+```
+
+Revisa el API (`rescan()` i `setRescan()`)
+
+Fijar el radar en un enemigo (one on one radar):
+
+- Escaneo con multiplicador
+
+  ```java
+  public void onScannedBot(ScannedBotEvent e) {
+      double factor=1.9;
+      setTurnRadarLeft(factor * radarBearingTo(e.getX(), e.getY()));
+  }
+  ```
+
+  Segun el factor:
+
+  - `1.0` - Bloqueo de radar delgado. Debe llamar a scan() para evitar perder el bloqueo. Que Dios te ayude si alguna vez te saltas un turno.
+  - `1.9` - El arco del radar comienza amplio y se estrecha lentamente tanto como sea posible mientras se mantiene en el objetivo.
+  - `2.0`: el arco del radar recorre un ángulo fijo. El ángulo exacto elegido depende de las posiciones del enemigo y del radar cuando se detecta al enemigo por primera vez. El ángulo se incrementará si es necesario para mantener el bloqueo.
+
+- Arco de radar Ancho
+
+  ```java
+  public void onScannedBot(ScannedBotEvent e) {
+      //set the wide to add to the scan.
+      double wide=36.0;
+      // Absolute angle towards target
+      double angleToEnemy = radarBearingTo(e.getX(), e.getY());
+      // Distance we want to scan from middle of enemy to either side
+      // The 36.0 is how many units from the center of the enemy robot it scans.
+      double extraTurn = Math.min(Math.atan(wide / distanceTo(e.getX(), e.getY())), getMaxRadarTurnRate());
+  
+      // Adjust the radar turn so it goes that much further in the direction it is going to turn
+      // Basically if we were going to turn it left, turn it even more left, if right, turn more right.
+      // This allows us to overshoot our enemy so that we get a good sweep that will not slip.
+      if (angleToEnemy < 0)
+          angleToEnemy -= extraTurn;
+      else
+          angleToEnemy += extraTurn;
+  
+      //Turn the radar
+      setTurnRadarLeft(angleToEnemy);
+  }
+  ```
+
+- Radar Oscilante (variable global que sepa la dirección y nos ayude a cambiarla de vez en cuando)
+
+- Escaneo más inteligente (seguir al cercano? según la situación?) ...
+
+- Nos interesa mantener una lista de enemigos? `e.getScannedBotId()`? y por ejemplo fijar el radar en el más débil?...
 
 ## Técnicas de desplazamiento (Movimiento)
-
-### Detección de colisiones más rápida
-
-Podemos determinar si un punto está dentro de las 18 unidades del centro del bot. Con la fórmula:
-$$
-d^2 = \Delta{x}^2 + \Delta{y}^2
-$$
-Esto significa que sólo necesitamos calcular $\Delta{x}^2$ + $\Delta{y}^2$ y ver si es menor que 324 (18^2^) para ver si el punto está dentro del círculo delimitador.z
 
 ### Pensamiento lateral
 
@@ -236,7 +303,7 @@ Si has jugado baloncesto antes, sabes que si quieres defender a alguien que sost
 Para conseguir esta posición debemos hacer algo similar a esto:
 
 ```java
-setTurnLeft(e.getBearing() + 90);
+turnLeft(bearingTo(e.getX(), e.getY()) + 90);
 ```
 
 que siempre colocará tu robot perpendicular (90 grados) a tu enemigo.
@@ -289,19 +356,36 @@ Ponlo en tu método `doMove()` (o en cualquier otro lugar donde estés manejando
 Puedes rodear a tu enemigo simplemente usando las técnicas anteriores:
 
 ```java
-public void doMove() {
-	// switch directions if we've stopped
-	if (getVelocity() == 0)
-		moveDirection *= -1;
-	// circle our enemy
-    setTurnLeft(lastScannedBearing-90);
-	setAhead(1000 * moveDirection);
-}
+public class IABDBot extends Bot {
+	double moveDirection=1;
+	private double ultimoEnemigoVisto;
+    ...
+@Override
+    public void run() {
+        while (isRunning()) {
+            doMove();
+            go();
+        }
+        
+    public void onScannedBot(ScannedBotEvent e) {
+        ...
+        ultimoEnemigoVisto=bearingTo(e.getX(), e.getY());
+		...
+    }
+        
+    public void doMove() {
+        // switch directions if we've stopped
+        if (getSpeed() == 0)
+            moveDirection *= -1;
+        // circle our enemy
+        setTurnLeft(ultimoEnemigoVisto+90);
+        setForward(1000 * moveDirection);
+    }
 ```
 
 Objetivo: rodea a tu enemigo usando el código de movimiento anterior, como un tiburón rodeando a su presa en el agua.
 
-**Ametrallamiento**
+**Evita Ametrallamiento**
 
 Un problema que puedes notar con el anterior tipo de movimiento es que es presa fácil para los objetivos predictivos porque sus movimientos son tan... predecibles.
 
@@ -309,14 +393,14 @@ Para evadir las balas de manera más efectiva, debes moverte de lado a lado o "a
 
 ```java
 public void doMove() {
-
-	// always square off against our enemy
-    setTurnLeft(lastScannedBearing-90);
-
-	// strafe by changing direction every 20 ticks
+    // switch directions if we've stopped
+    if (getSpeed() == 0)
+        moveDirection *= -1;
+    // circle our enemy
+    setTurnLeft(ultimoEnemigoVisto+90);
     if (getTurnNumber() % 20 == 0) {
-    	moveDirection *= -1;
-    	setForward(1000 * moveDirection);
+        moveDirection *= -1;
+        setForward(1000 * moveDirection);
     }
 }
 ```
@@ -332,6 +416,8 @@ Para hacer que tu robot se acerque a tu enemigo, simplemente modifica el código
 ```java
 setTurnLeft((lastScannedBearing + 90 - (15 * moveDirection)));
 ```
+
+15 es un factor en grados que puedes modificar y ajustar. Prueba!
 
 Modificando el primero conseguimos una variación que utiliza el código anterior para lanzarse en espiral hacia su enemigo.
 
