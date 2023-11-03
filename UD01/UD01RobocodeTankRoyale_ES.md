@@ -320,7 +320,7 @@ class MyRobot extends Bot {
 luego, cuando quieras mover tu robot, simplemente puedes decir:
 
 ```java
-setAhead(100 * moveDirection);
+setForward(100 * moveDirection);
 ```
 
 Puedes cambiar de dirección cambiando el valor de moveDirection de 1 a -1 así:
@@ -335,7 +335,7 @@ El enfoque más intuitivo para cambiar de dirección es simplemente cambiar la d
 
 ```java
 public void onHitWall(HitWallEvent e) { moveDirection *= -1; }
-public void onHitRobot(HitRobotEvent e) { moveDirection *= -1; }
+public void onHitBot(HitBotEvent e) { moveDirection *= -1; }
 ```
 
 Sin embargo, descubrirás que si haces eso, terminarás presionando obstinadamente contra un robot que te embiste desde un costado (como un perro en celo). Esto se debe a que se llama a `onHitRobot()` tantas veces que moveDirection sigue cambiando y nunca te alejas.
@@ -343,7 +343,7 @@ Sin embargo, descubrirás que si haces eso, terminarás presionando obstinadamen
 Un mejor enfoque es simplemente probar para ver si su robot se ha detenido. Si es así, probablemente significa que has golpeado algo y querrás cambiar de dirección. Puedes hacerlo con el código:
 
 ```java
-if (getVelocity() == 0)
+if (getSpeed() == 0)
 	moveDirection *= -1;
 ```
 
