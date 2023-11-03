@@ -94,15 +94,16 @@ ___
 <!--Los sistemas basados en reglas son ampliamente utilizados en aplicaciones donde se requiere un razonamiento transparente y fácil de entender, ya que las reglas lógicas son explícitas y pueden ser interpretadas por humanos.-->
 <!--Estos modelos de sistemas de Inteligencia Artificial representan diferentes enfoques para resolver problemas y tomar decisiones en diversas aplicaciones. Cada uno de estos modelos tiene sus propias ventajas y desafíos, y la elección del enfoque adecuado depende del contexto y los requisitos específicos del problema a resolver.-->
 ___
+# 4. Técnicas de la Inteligencia Artificial
+A continuación veremos una taxonomía de técnicas que se usan en IA, algunas se estudiaran a fondo en este módulo (Modelos de Inteligencia Artificial - MIA) y otros en otro módulo del curso (Sistemas de Aprendizaje Automático - SAA).
+___
 <style scoped>
 section {
   @extend .markdown-body;
-  font-size: 30px;
+  font-size: 33px;
   justify-content: top;
  }
 </style>
-# 4. Técnicas de la Inteligencia Artificial
-<!--A continuación veremos una taxonomía de técnicas que se usan en IA, algunas se estudiaran a fondo en este módulo (Modelos de Inteligencia Artificial - MIA) y otros en otro módulo del curso (Sistemas de Aprendizaje Automático - SAA).-->
 ## Modelo Clásico. Sistemas expertos (MIA)
 * La Inteligencia Artificial, inicialmente, tuvo un desarrollo más teórico que práctico. Los planteamientos originarios de esta Inteligencia Artificial clásica se definieron para un tipo de trabajo informático que ignoraba en buena medida cómo se ha desarrollado en los últimos decenios y que actualmente está establecido como convencional.
 * > Recuerda que estamos hablando de los años 60 del Siglo XX, y que en esa época apenas existían ordenadores experimentales, con una memoria y capacidad de cómputo que ahora consideraríamos ridículos.
