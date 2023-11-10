@@ -273,7 +273,7 @@ Fijar el radar en un enemigo (one on one radar):
       double angleToEnemy = radarBearingTo(e.getX(), e.getY());
       // Distance we want to scan from middle of enemy to either side
       // The 36.0 is how many units from the center of the enemy robot it scans.
-      double extraTurn = Math.min(Math.atan(wide / distanceTo(e.getX(), e.getY())), getMaxRadarTurnRate());
+      double extraTurn = Math.min(Math.toDegrees(Math.atan(36.0 / distanceTo(e.getX(), e.getY()))), getMaxRadarTurnRate());
   
       // Adjust the radar turn so it goes that much further in the direction it is going to turn
       // Basically if we were going to turn it left, turn it even more left, if right, turn more right.
