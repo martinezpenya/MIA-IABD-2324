@@ -439,25 +439,29 @@ public class WallAvoider extends Bot {
 	private int wallMargin = 60; 
 ```
 
-A continuación, agregamos un evento personalizado que se activará cuando se cumpla una determinada condición:
+A continuación, agregamos un evento personalizado que se activará cuando se cumpla una determinada condición dentro del método `run()`:
 
 ```java
-// Don't get too close to the walls
-addCustomEvent(new Condition("TooCloseToWalls") {
-    public boolean test() {
-        // El método test() es el que debemos reescribir para definir el resultado de nuestra condición.
-        return (
-            // we're too close to the left wall
-            (getX() <= wallMargin ||
-             // or we're too close to the right wall
-             getX() >= getArenaWidth() - wallMargin ||
-             // or we're too close to the bottom wall
-             getY() <= wallMargin ||
-             // or we're too close to the top wall
-             getY() >= getArenaHeight() - wallMargin)
-        );
-    }
-});
+public void run() {
+    ...
+    // No te acerques mucho a las paredes
+    addCustomEvent(new Condition("TooCloseToWalls") {
+        public boolean test() {
+            // El método test() es el que debemos reescribir para definir el resultado de nuestra condición.
+            return (
+                // cerca de la pared izquierda
+                (getX() <= wallMargin ||
+                 // cerca de la pared derecha
+                 getX() >= getArenaWidth() - wallMargin ||
+                 // cerca de la pared inferior
+                 getY() <= wallMargin ||
+                 // cerca de la pared superior
+                 getY() >= getArenaHeight() - wallMargin)
+            );
+        }
+    });
+    ...
+}
 ```
 
 Ten en cuenta que estamos creando una clase interna anónima con esta llamada. Necesitamos hacer override del método `test()` para devolver un valor booleano cuando ocurra nuestro evento personalizado.
@@ -471,7 +475,7 @@ Lo siguiente que debemos hacer es manejar el evento, que se puede hacer así:
         if (e.getCondition().getName().equals("TooCloseToWalls")) {
             // switch directions and move away
             moveDirection *= -1;
-            setForward(100 * moveDirection);
+            Forward(100 * moveDirection);
         }
     }
 ```
@@ -654,9 +658,14 @@ A continuación, debemos calcular la posición futura de nuestro enemigo:
 // Calcular la velocidad actual de tu enemigo
 double enemyVelocity = e.getSpeed();
 
+// Calcular la dirección actual del enemigo
+double enemyDirection = e.getDirection();
+
 // Calcular el desplazamiento en las coordenadas X e Y
-double deltaX = enemyVelocity * Math.sin(e.getDirection()); // Componente X del desplazamiento
-double deltaY = enemyVelocity * Math.cos(e.getDirection()); // Componente Y del desplazamiento
+// Componente X del desplazamiento
+double deltaX = enemyVelocity * Math.cos(Math.toRadians(enemyDirection));
+// Componente Y del desplazamiento
+double deltaY = enemyVelocity * Math.sin(Math.toRadians(enemyDirection)); 
 
 // Calcular las coordenadas futuras
 double futureX = e.getX() + (deltaX * time);
@@ -665,10 +674,20 @@ double futureY = e.getY() + (deltaY * time);
 
 ### Girando el arma al punto previsto
 
-Por último, debemos apuntar nuestro cañon al lugar previsto de impacto:
+Ahora debemos apuntar nuestro cañon al lugar previsto de impacto:
 
 ```java
 setTurnGunLeft(gunBearingTo(futureX, futureY));
+```
+
+### Disparando!
+
+Por último disparamos nuestro cañon
+
+```java
+if (getGunTurnRemaining() <= 0 && getGunHeat() == 0) {
+	fire(firePower);
+}
 ```
 
 # Investigación y desarrollo propio
