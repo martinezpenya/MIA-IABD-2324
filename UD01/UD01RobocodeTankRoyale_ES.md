@@ -587,7 +587,7 @@ Otro aspecto importante al disparar es calcular la potencia de fuego de tu bala.
 
 ```java
 public void smartFire(double distance){
-    if (distance >200) || getEnergy() <15){
+    if ((distance >200) || (getEnergy() <15)){
         fire(1);
     } else if (distance > 50){
         fire(2);
