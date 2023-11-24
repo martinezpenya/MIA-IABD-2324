@@ -92,11 +92,9 @@ El código fuente de su Bot (el nombre del bot será el nombre de su autor más 
 - Descripción del funcionamiento: estructura, sistema basado en casos, analisis y evolución de la solución, etc.
 - Descripción detallada de los métodos definidos y/o usados
 - Conclusiones
-- Webgrafia/Bibliografia
+- Webgrafia/Bibliografía
 
 # Requisitos mínimos
-
-> ### Pendiente de revisión
 
 - Modo melé
 - 10 asaltos

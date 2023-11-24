@@ -606,7 +606,7 @@ setFire(400/distanceTo(e.getX(), e.getY()));
 Con esta fórmula, a medida que aumenta la distancia del enemigo, la potencia de fuego disminuye. Asimismo, a medida que el enemigo se acerca, la potencia de fuego aumenta. Los valores superiores a 3 se reducen a 3, por lo que nunca dispararemos una bala mayor que 3, pero probablemente deberíamos reducir el valor de todos modos (solo para estar seguros) de esta manera:
 
 ```java
-setFire(Math.max(400/distanceTo(e.getX(), e.getY()), 3));
+setFire(Math.max(500/distanceTo(e.getX(), e.getY()), 3));
 ```
 
 ### Evitar disparos prematuros
@@ -617,7 +617,7 @@ Además, no puedes disparar si el arma está "caliente" desde el último disparo
 
 ### Apuntando de manera predictiva
 
-O.. "Usar la trigonometría para impresionar a tus amigos y destruir a tus enemigos".
+O... "Usar la trigonometría para impresionar a tus amigos y destruir a tus enemigos".
 
 Si quisiéramos poder golpear a un robot que recorre las paredes siempre fallaríamos, necesitamos poder predecir dónde estará en el futuro, pero ¿cómo podemos hacerlo?
 
@@ -657,14 +657,12 @@ A continuación, debemos calcular la posición futura de nuestro enemigo:
 ```java
 // Calcular la velocidad actual de tu enemigo
 double enemyVelocity = e.getSpeed();
-
 // Calcular la dirección actual del enemigo
 double enemyDirection = e.getDirection();
-
-// Calcular el desplazamiento en las coordenadas X e Y
-// Componente X del desplazamiento
+// Descomponer el desplazamiento en las coordenadas X e Y
+// Componente X del desplazamiento COSENO
 double deltaX = enemyVelocity * Math.cos(Math.toRadians(enemyDirection));
-// Componente Y del desplazamiento
+// Componente Y del desplazamiento SENO
 double deltaY = enemyVelocity * Math.sin(Math.toRadians(enemyDirection)); 
 
 // Calcular las coordenadas futuras
@@ -689,6 +687,14 @@ if (getGunTurnRemaining() <= 0 && getGunHeat() == 0) {
 	fire(firePower);
 }
 ```
+
+### Mejor aún...!
+
+Aquí te dejo algunas mejoras para que las valores:
+
+- ¿Debemos esperar siempre a que el arma esté completamente en la dirección calculada?
+- Cuando nuestro enemigo se acerca a una pared, nuestros disparos impactan en ella.
+- ¿Puedo saber a quien disparo si mi previsión de impacto falla mucho?
 
 # Investigación y desarrollo propio
 
