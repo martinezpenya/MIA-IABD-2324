@@ -541,7 +541,7 @@ public class MultiModeBot extends Bot {
     ...
 }
 
-public void onRobotDeath(RobotDeathEvent e) {
+public void onBotDeath(BotDeathEvent e) {
 	...
 	if (getEnemyCount() > 10) {
 		// Un gran número de enemigos sugiere movimientos fluidos
