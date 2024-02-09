@@ -129,147 +129,17 @@ Los aspectos fundamentales de las aplicaciones arriba mencionadas son los que se
 
 Disciplina encargada de convertir los fonemas emitidos por un ser humano en espectros de ondas de audio captados mediante un dispositivo de entrada de sonido de una máquina que, tras ser procesados dentro del contexto de un modelo lingüístico, den lugar a las grafías escritas del mismo; es decir, los sistemas de las máquinas encargados de convertir la voz captada por medio de un sensor (normalmente un micrófono) en la forma escrita de una lengua.
 
-> ## La información de su uso e instalación puede consultarse en: https://github.com/dusty-nv/jetson-voice **TODO: NO FUNCIONA!**
->
-> Instalar **gpu** para jetson-voice: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html (todo excepto cri-o)
+### Síntesis de texto a voz (TTS, Text To Speech)
 
-Se presenta a continuación el esquema básico de nVidia NeMo (https://github.com/NVIDIA/NeMo): NeMo - a toolkit for conversational AI - GitHub. **TODO: NO FUNCIONA!**
-
-La solución para el ecosistema Jetson es Jetson-voice en lugar de NeMo. La instalación de NeMo puede llevarse a cabo desde dos perspectivas diferentes, bien como un contenedor de Docker mediante el contenedor:
-
-```sh
-sudo docker pull nvcr.io/nvidia/nemo:23.10
-sudo docker run --runtime=nvidia -it -v ./nemo:/nemo/notebooks/host -p 8888:8888 -p 6006:6006 --shm-size=16g --ulimit memlock=-1 --ulimit stack=67108864 nvcr.io/nvidia/nemo:23.10
-```
-
-
-O bien para ordenadores portátiles o de escritorio basados en sistemas x64 por medio de las siguientes instrucciones:
-
-```sh
-apt-get update && apt-get install -y libsndfile1 ffmpeg
-pip install Cython
-pip install nemo_toolkit[′all′]
-```
-
-Es preciso tener en cuenta la gran diferencia entre los sistemas online (en los que el texto captado en un dispositivo [como en un JetBot] es enviado a un servidor de inferencia [por ejemplo, JARVIS] donde es procesado, y el texto devuelto al robot original), y los sistemas offline, donde toda la operación se realiza en el robot. El primer sistema corresponde al de los asistentes como Alexa o Google.
-
-Desde un punto de vista más general, y sin emplear los núcleos sombreadores de la tarjeta gráfica para acelerar el proceso, existen muchas soluciones académicas y generales que se pueden utilizar para llevar a cabo proyectos de inteligencia artificial.
-
-El siguiente enlace https://pypi.org/project/SpeechRecognition/ corresponde a una librería sobre Python capaz de interactuar con diversas API para llevar a cabo reconocimiento de voz, fácilmente instalable mediante pip en Python3. La librería Pyaudio se empleará para gestionar el micrófono. CMU Sphinx se puede utilizar para trabajar sin conexión a Internet (offline), mientras que otras como la de Google requerirá uso de Internet para llegar a los servidores de procesamiento.
-
-> ### normalmente las compañías no otorgan licencia para uso comercial gratuito de sus sistemas, consulte las condiciones particulares de cada una.
-
-> ## Para instalar en Python las librerías se ejecuta desde la terminal los siguientes comandos:
->
-> ```sh
-> pip install SpeechRecognition
-> pip install pyaudio
-> ```
->
-
-### Síntesis de texto a voz
-
-También conocido como TTS (Text to speech), estos sistemas hacen la labor contraria a un ASR, es decir, a partir de un texto escrito son capaces de reproducirlo mediante el dispositivo de salida de audio (altavoces). 
-
-Lo mismo que se señaló para AST en relación con NeMo es de aplicación aquí; los links son los siguientes:
-
-https://github.com/NVIDIA/NeMo/tree/main/examples/tts
-
-https://github.com/NVIDIA/NeMo/tree/main/tutorials/tts
-
-De cara a las unidades JetBot, debido a la baja carga de computación que requiere un TTS, en lugar de ejecutar NeMo es posible instalar una librería genérica de TTS como espeak TTS (offline) o gtts (online a través de Google). Para reproducirlo se puede emplear cualquier función de salida de audio que se haya instalado, como playsound o por medio de la librería os, emplear una sentencia del estilo `os.system("mpg321 fichero.mp3")`.
-
-```sh
-pip install python-espeak
-pip install pyttsx3
-```
-
-```python
-import espeak
-import pyttsx3
-engine = pyttsx3.init()
-engine.setProperty(′rate′, 120)
-engine.setProperty(′voice′, ′spanish′)
-engine.setProperty(′volume′, 1)
-engine.say("Hola Mundo. Prueba de texto a voz en español")
-engine.runAndWait()
-```
-
-```sh
-pip install gTTS
-```
-
-```python
-from gtts import gTTS
-import os
-from playsound import playsound
-tts = gTTS(′Hola mundo. Prueba de texto voz.′, lang=′es-es′)
-tts.save("fichero.mp3")
-playsound("fichero.mp3")
-```
-Más information disponible en la web del fabricante: https://pypi.org/project/gTTS/
-
-Bien de manera escrita, o bien mediante el auxiliar de las aplicaciones de reconocimiento de la voz (ASR), y de síntesis de texto a voz (TTS), los agentes conversacionales se emplean para multitud de tareas, desde ser asistentes al usuario que lo guíen a través de caminos preconcebidos como asistentes de ventas, o como resolutores de problemas postventas, ligándose enormemente a las métricas y los procedimientos de los departamentos de control de calidad y de satisfacción al cliente.
-
-> ## Una aplicación de atención al cliente de un ISP podría emplear un chatbot de tal manera que, en función de los conceptos claves detectados mediante un NER, fuera haciendo preguntas al usuario y sugiriendo posibles caminos de resolución.
+Estos sistemas hacen la labor contraria a un ASR, es decir, a partir de un texto escrito son capaces de reproducirlo mediante el dispositivo de salida de audio (altavoces). 
 
 ### Detección de entidades nombradas (NER, named entity recognition)
 
 Consiste en trozear el texto (tokenizar) de tal manera que se detecten las palabras clave. Se trata pues de una labor de extracción de información que localiza y clasifica en categorías (normalmente personas, organizaciones, lugares, y cantidades) las entidades encontradas en un texto.
 
->#### Se trabaja con la herramienta online https://explosion.ai/demos/ que emplea como base Spacy y sus diccionarios.
->
->```sh
->!pip install spacy
->!python -m spacy download es_core_news_sm
->!python -m spacy download en_core_web_sm
->```
->
->```python
-># Tras instalar SPacy y los modelos en español e inglés#
->import spacy
->from spacy import displacy
->from collections import Counter
->import es_core_news_sm
->nlp = es_core_news_sm.load()
->doc = nlp(′Carlos enseña a los alumnos a programar con NVIDIA′)
->print([(X.text, X.label_) for X in doc.ents])
->```
->
->Nota: mediante una orden gráfica y un entorno gráfico de iPython como el de Jupyter, es posible graficar los NER y la tokenización mediante `displacy.render(doc, style=′dep′, jupyter = True, options = {′distance′: 120}`).
->La salida no gráfica es la siguiente:
->`[(′Carlos′, ′PER′), (′NVIDIA′, ′ORG′)]`
-
-
-
-> ## En el siguiente recurso WEB se incluye material y ejemplos con NLTK y con SPacy: https://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da
->
-> Para estudiar ejemplos de material mediante NeMo, se puede clicar en el siguiente link: https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/nlp/token_classification.html
-
-> ## Practicar con el siguiente tutorial básico, dentro de la carpeta de GitHub indicada al inicio de la unidad: https://github.com/NVIDIA/NeMo/blob/main/tutorials/nlp/Token_Classification_Named_Entity_Recognition.ipynb
->
-
 ### Traducción automática
 
-En el siguiente link se estudia todo lo relativo a la traducción automática: https://docs.nvidia.com/deeplearning/nemo/archives/nemo-100rc1/user-guide/docs/nlp/machine_translation.html
-
-```sh
-sudo docker pull nvcr.io/nvidia/nemo:1.5.1
-sudo docker run --runtime=nvidia -it -v /mnt/d/docker/nemo:/nemo/notebooks/host -p 8888:8888 -p 6006:6006 --shm-size=16g --ulimit memlock=-1 --ulimit stack=67108864 nvcr.io/nvidia/nemo:1.5.1
-```
-
-```python
-from nemo.collections.nlp.models import MTEncDecModel
-# Se obtiene el listado de modelos preentrenados disponibles
-MTEncDecModel.list_available_models()
-# Se descarga el modelo de inglés a español
-model = MTEncDecModel.from_pretrained("nmt_en_es_transfor-mer12x2")
-# Se ejecutra sobre la muy conocida frase "Hola Mundo"
-translations = model.translate(["Hello World!"], source_lang="en", target_lang="es")
-print(translations)
-```
-
-TODO: Revisar links i añadir ejemplos de ejecución
+Se centra en el desarrollo de sistemas capaces de traducir automáticamente texto o habla de un idioma a otro.
 
 ### Similitud de textos
 
@@ -279,54 +149,13 @@ Por ejemplo, un perro es un mamífero y a su vez es un animal. Un etiquetado cor
 
 Mediante técnicas de vectorización y de cálculo del coseno es posible analizar dos textos y decir el «parecido» que tengan entre sí, aunque lógicamente esta apreciación de parecido es subjetiva y depende del set de datos que haya sido empleado para llevar a cabo el entrenamiento.
 
-> #### Este ejemplo se realiza con Spacy, si bien es preciso puntualizar que se emplea el diccionario español de mayor tamaño, que ha de ser previamente descargado (`es_core_news_lg`).
->
-> ```sh
-> import spacy
-> from spacy import displacy
-> from collections import Counter
-> 
-> import es_core_news_lg
-> nlp = es_core_news_lg.load()
-> doc1 = nlp(′Carlos se come una manzana′)
-> doc2 = nlp(′María se come una ensalada′)
-> doc3 = nlp(′María y carlos se comen un plato de pasta ‹)
-> doc4 = nlp(′María y carlos ven una película′)
-> print(doc1, "<->", doc2, doc1.similarity(doc2))
-> print(doc1, "<->", doc3, doc1.similarity(doc3))
-> print(doc1, "<->", doc4, doc1.similarity(doc4))
-> print(doc3, "<->", doc4, doc3.similarity(doc4))
-> ```
->
-> TODO: **CAPTURA DE LA EJECUCIÓN!**
->
-> Como puede verse las dos primeras frases son muy parecidas (95%), dado que Carlos es una persona, María es otra persona, y manzana y ensalada aluden a comidas relativamente parecidas. Sin embargo, ver una película y comer un plato de pasta son asuntos distintos, aunque sean los dos realizados por María y Carlos, lo cual reduce la similitud de la frase 3 con la 4 a un 43,9 %, y entre las frases 1 y 4 cae a un 33,9 % ya que no sólo el predicado es distinto, sino que el sujeto también cambia.
-
 ### Análisis del sentimiento
 
 El procesamiento del lenguaje natural puede emplear también el etiquetado característico del aprendizaje automático supervisado para entrenar un modelo, de tal manera que sea capaz de captar la positividad o negatividad de un texto en relación con un tema particular.
 
 Esta potente herramienta es especialmente útil para llevar a cabo sondeos «invisibles» de la opinión de grandes grupos muestrales alrededor de un tema. Las redes sociales, y especialmente Twitter, conforman un campo de datos especialmente bueno para llevar a cabo este tipo de aplicaciones, ya que permiten analizar la opinión de un gran grupo de personas (por ejemplo, todo un país) alrededor de un asunto, o de una persona, lo que indirectamente se puede considerar un excelente sondeo de la opinión sobre la valoración de un político, o de un evento. También puede permitir a un asistente o chatbot, en una conversación larga, averiguar el estado de ánimo del usuario, y actuar en consecuencia.
 
-Un excelente ejemplo para ver cómo llevar a cabo un análisis del sentimiento puede encontrarse en el repositorio de GitHub de NeMo y ser ejecutado sobre Google Colab, o de manera local: https://colab.research.google.com/github/NVIDIA/NeMo/blob/stable/tutorials/nlp/Text_Classification_Sentiment_Analysis.ipynb No obstante, el código tal cual está planteado fallaría por la falta de descarga del set de datos. Como indica el tutorial, sería necesaria la descarga del set de datos SST-2 de la página web indicada, aunque también es posible ejecutar curl para su descarga (si bien queda de la mano del lector comprobar que el sitio de descarga cumple los términos de licencia del set de datos, y que no ha sido alterado con ningún tipo de código malicioso. La siguiente captura de pantalla es tan sólo un ejemplo del uso de curl, sobre una fuente no comprobada, propuesta por terceros
-en https://gist.github.com/W4ngatang/60c2bdb54d156a41194446737ce03e2e. Es importante llevar a cabo la descarga desde la página oficial.
-
-Hay que tener en cuenta que las diferentes versiones de NeMo requieren distintas dependencias, y es posible que en el primer paso del tutorial sea necesario añadir mediante ejecución de la CLI a través del magic command !pip un determinado paquete en una determinada versión. Por ejemplo: 
-
-```python
-!pip install folium==0.8.3
-!pip install imgaug==0.2.5
-```
-
-> ### se recomienda verificar el número de etapas de entrenamiento: `config.trainer.max_epochs = 3`
-
-Los resultados obtenidos, como puede observarse, son extremadamente buenos, determinando que críticas negativas son realmente negativas.
-
-Mientras que las críticas positivas son detectadas como positivas (etiquetadas como 1, frente a las negativas que se etiquetan como 0) en virtud de las etiquetas y textos definidos en:
-
-```python
-processed_results = postprocessing(preds, {"0": "negative", "1": "positive"})
-```
+#### Pruebas (EN CONSTRUCCIÓN)
 
 ## Limitaciones. La ambigüedad
 
@@ -437,7 +266,7 @@ Conjunto reducido de etiquetas **Parole**
 
 Un experto en sistemas de inteligencia artificial que desee adquirir conocimientos en procesamiento del lenguaje natural puede seguir muchos itinerarios. El aquí propuesto es una ruta tradicional, basada en una primera formación teórica y clásica, y una posterior aplicación de los métodos de procesamiento del lenguaje natural basados en redes neuronales. Por ello se aconseja la lectura del texto de Jurafsky, y posteriormente la lectura del manual base del Natural Learning ToolKit (NLTK) en lengua inglesa. A partir de ahí, continuar con Spacy en lenguas inglesa y española, y finalmente dar el paso a nVidia NeMo para ejecución de ASR, TTS y NLP en plataformas jetbot y posteriormente crecer a un entorno de servidores tipo JARVIS/TRITÓN.
 
-- **NLTK**: puede ser descargado desde el portal web propietario https://www.nltk.org/ y a partir de ahí leer las instrucciones de instalación https://www.nltk.org/install.html, que son muy simples, y descargar los sets de datos mediante el comando nltk.download(all) dentro del entorno de Python 3 (y tras ejecutar el import correspondiente). Incluso puede instalar el Stanford CoreNLP API para NLTK desde https://github.com/nltk/nltk/wiki/Stanford-CoreNLP-API-in-NLTK que incluye modelo para nuestra lengua. Dentro de NLTK debería seguir el orden lógico que se muestra en el NLTK-BOOK público (disponible en https://www.nltk.org/book/):
+- **NLTK**: puede ser descargado desde el portal web propietario https://www.nltk.org/ y a partir de ahí leer las instrucciones de instalación https://www.nltk.org/install.html, que son muy simples, y descargar los sets de datos mediante el comando `nltk.download(all)` dentro del entorno de Python 3 (y tras ejecutar el import correspondiente). Incluso puede instalar el Stanford CoreNLP API para NLTK desde https://github.com/nltk/nltk/wiki/Stanford-CoreNLP-API-in-NLTK que incluye modelo para nuestra lengua. Dentro de NLTK debería seguir el orden lógico que se muestra en el NLTK-BOOK público (disponible en https://www.nltk.org/book/):
   - Cargar un corpus.
   - Usar expresiones regulares.
   - Tokenizar y etiquetar.
@@ -471,6 +300,19 @@ Un experto en sistemas de inteligencia artificial que desee adquirir conocimient
     - Lo mismo que en Spacy.
     - Uso del modelo de Megatron.
     - Programar un Q&A tipo Jeopardy.
+- **jetson-voice**: es una biblioteca de inferencia de aprendizaje profundo ASR/NLP/TTS para Jetson Nano, TX1/TX2, Xavier NX y AGX Xavier. Es compatible con Python y JetPack 4.4.1 o posterior. Los modelos DNN se entrenaron con NeMo y se implementaron con TensorRT para optimizar el rendimiento. Todos los cálculos se realizan utilizando la GPU integrada. Actualmente se incluyen las siguientes capacidades:
+  -  Reconocimiento automático de voz (ASR)
+    - Transmisión ASR (QuartzNet)
+    - Reconocimiento de comandos/palabras clave (MatchboxNet)
+    - Detección de actividad de voz (VAD Marblenet)
+
+  - Procesamiento del lenguaje natural (PNL)
+    - Clasificación de intención conjunta/espacio
+    - Clasificación de texto (análisis de sentimiento)
+    - Clasificación de tokens (reconocimiento de entidad nombrada)
+    - Preguntas/Respuestas (QA)
+    - Texto a voz (TTS)
+
 
 # Elaboración de un sistema de procesamiento de lenguaje orientado a una tarea específica
 
